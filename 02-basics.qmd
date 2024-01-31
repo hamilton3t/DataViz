@@ -1,0 +1,93 @@
+---
+title: "Section 2: Review"
+format: html
+editor: visual
+---
+
+```{r}
+library(palmerpenguins)
+library(tidyverse)
+theme_set(theme_minimal())
+penguins
+
+## single quantitative frequency plot
+ggplot(data = penguins, aes(x = bill_length_mm)) +
+  geom_freqpoly() 
+
+ggplot(data = penguins, aes(x = bill_length_mm)) +
+  geom_histogram(colour = "black", fill = "white", bins = 15) +
+  facet_wrap(~ species)
+
+ggplot(data = penguins, aes(x = species)) +
+  geom_bar(stat = "count") ## don't need stat = "count" because it's the default.
+
+penguins <- penguins |> as_tibble()
+
+penguins_sum <- penguins |> group_by(species) |>
+  summarise(n_count = n())
+ggplot(data = penguins_sum, aes()) + 
+  geom_bar(stat = "identity")
+## equivalent to using geom_col()
+
+ggplot(data = penguins, aes(x = species, fill = sex)) +
+  geom_bar(position = "stack") + ## don't need "stack" because it's default
+  scale_fill_viridis_d()
+
+penguins |> na. omit ## gets rid of any row with NA
+penguins_nomiss <- penguins |> filter(!is.na(sex)) 
+  
+ggplot(data = penguins, aes(x = species, fill = sex)) +
+  geom_bar(position = "dodge") + 
+  scale_fill_viridis_d()
+
+```
+
+Exercise 1:
+
+```{r}
+ggplot(data = penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point(stat ="identity", position = "identity") +
+  facet_null() +
+  coord_cartesian()
+```
+
+Your Turn:
+
+```{r}
+## Exercise 1:
+ggplot(data = penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point(stat ="identity", position = "identity") +
+  geom_smooth() +
+  facet_null() +
+  coord_cartesian()
+```
+
+```{r}
+## Exercise 2: 
+ggplot(data = penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point(aes(color = species)) +
+  geom_smooth() +
+  facet_null() +
+  coord_cartesian()
+```
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
